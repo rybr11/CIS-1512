@@ -1,0 +1,101 @@
+// List of possible names
+const names = ["Aragorn", "Legolas", "Gimli", "Gandalf", "Frodo", "Boromir", "Eowyn", "Elrond", "Galadriel", "Thorin"];
+
+// List of races and their attribute bonuses
+const races = {
+    Human: { Strength: 1, Dexterity: 1, Constitution: 1, Intelligence: 1, Wisdom: 1, Charisma: 1 },
+    Elf: { Dexterity: 2, Intelligence: 1 },
+    Dwarf: { Strength: 2, Constitution: 2 },
+    Halfling: { Dexterity: 2, Charisma: 1 },
+    Gnome: { Intelligence: 2, Constitution: 1 },
+    Dragonborn: { Strength: 2, Charisma: 1 }
+};
+
+// List of possible classes
+const classes = ["Fighter", "Rogue", "Wizard", "Cleric", "Ranger", "Paladin"];
+
+// Function to generate a random number between 8 and 18 (inclusive)
+function getRandomStat() {
+    return Math.floor(Math.random() * (18 - 8 + 1)) + 8;
+}
+
+// Function to choose a random item from an array
+function getRandomFromArray(array) {
+    return array[Math.floor(Math.random() * array.length)];
+}
+
+// Function to apply race bonuses to the attributes
+function applyRaceBonuses(character, race) {
+    const bonuses = races[race];
+    for (let attribute in bonuses) {
+        if (bonuses.hasOwnProperty(attribute)) {
+            character[attribute] += bonuses[attribute];
+        }
+    }
+}
+
+// Function to calculate the modifier based on the attribute score
+function getModifier(score) {
+    if (score <= 9) return "-1";
+    if (score <= 11) return "0";
+    if (score <= 13) return "+1";
+    if (score <= 15) return "+2";
+    if (score <= 17) return "+3";
+    if (score <= 19) return "+4";
+    return "+5";
+}
+
+// Function to create a randomized D&D character sheet
+function createCharacterSheet() {
+    const race = getRandomFromArray(Object.keys(races));
+    const characterClass = getRandomFromArray(classes);
+    const name = getRandomFromArray(names);
+
+    const character = {
+        Name: name,
+        Race: race,
+        Class: characterClass,
+        Strength: getRandomStat(),
+        Dexterity: getRandomStat(),
+        Constitution: getRandomStat(),
+        Intelligence: getRandomStat(),
+        Wisdom: getRandomStat(),
+        Charisma: getRandomStat()
+    };
+
+    // Apply race bonuses
+    applyRaceBonuses(character, race);
+
+    return character;
+}
+
+// Function to display the character sheet in the console
+function displayCharacterSheet(character) {
+    console.log("Dungeons & Dragons Character Sheet:");
+    console.log("-------------------------------");
+    console.log("Name:", character.Name);
+    console.log("Race:", character.Race);
+    console.log("Class:", character.Class);
+    console.log("-------------------------------");
+
+    // Display attributes with modifiers
+    console.log("Strength:", character.Strength, getModifier(character.Strength));
+    console.log("Dexterity:", character.Dexterity, getModifier(character.Dexterity));
+    console.log("Constitution:", character.Constitution, getModifier(character.Constitution));
+    console.log("Intelligence:", character.Intelligence, getModifier(character.Intelligence));
+    console.log("Wisdom:", character.Wisdom, getModifier(character.Wisdom));
+    console.log("Charisma:", character.Charisma, getModifier(character.Charisma));
+    console.log("-------------------------------");
+}
+
+// Function to generate and display multiple character sheets
+function generateMultipleCharacterSheets(numberOfCharacters) {
+    for (let i = 0; i < numberOfCharacters; i++) {
+        const characterSheet = createCharacterSheet();
+        displayCharacterSheet(characterSheet);
+        console.log("\n");
+    }
+}
+
+// Generate and display 3 random character sheets
+generateMultipleCharacterSheets(3);
